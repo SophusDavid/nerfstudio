@@ -91,7 +91,8 @@ class MLP(FieldComponent):
             # as checked in `build_nn_modules`, 0 should not be in `_skip_connections`
             if i in self._skip_connections:
                 x = torch.cat([in_tensor, x], -1)
-            x = layer(x)
+
+            x = layer(x.float())
             if self.activation is not None and i < len(self.layers) - 1:
                 x = self.activation(x)
         if self.out_activation is not None:
