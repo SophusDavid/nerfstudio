@@ -188,4 +188,7 @@ camera_paths/
 ._.DS_Store
 */**/.DS_Store
 */**/._.DS_Store
-
+raw_data
+.idea
+.vscode
+YNMuseum

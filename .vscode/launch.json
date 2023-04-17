@@ -24,7 +24,17 @@
       "request": "launch",
       "program": "${file}",
       "console": "integratedTerminal",
-      "justMyCode": true
+      "justMyCode": true,
+      "args": ["--task", 
+      "normal",
+      "--img_path", 
+      "/home/david/develop/sdfstudio/data/ala/statue/images", 
+      "--output_path",
+      "/home/david/develop/sdfstudio/data/ala/statue_monosdf", 
+      "--omnidata_path", 
+      "/home/david/develop/sdfstudio/omnidata-main/omnidata_tools/torch",
+      "--pretrained_models", 
+     " /home/david/develop/sdfstudio/omnidata-main/omnidata_tools/torch/pretrained_models"]
     },
     {
       "name": "Python: train",
@@ -110,6 +120,19 @@
         "sdfstudio-data",
         "--data=data/sdfstudio-demo-data/replica-room0",
         "--include_mono_prior=True"
+      ]
+    },
+    {
+      "name": "Python: Nerfacto debug",
+      "type": "python",
+      "request": "launch",
+      "program": "scripts/train.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {"CUDA_VISIBLE_DEVICES":"0"},
+      "args": [
+        "nerfacto",
+        "--data=data/2",
       ]
     },
   ]
