@@ -164,6 +164,7 @@ class NerfactoModel(Model):
         # )
         self.field = TorchNerfactoField(
             self.scene_box.aabb, spatial_distortion=scene_contraction, num_images=self.num_train_data
+
         )
         self.density_fns = []
         num_prop_nets = self.config.num_proposal_iterations
