@@ -163,9 +163,11 @@ class NerfactoModel(Model):
         #     use_average_appearance_embedding=self.config.use_average_appearance_embedding,
         # )
         self.field = TorchNerfactoField(
-            self.scene_box.aabb, spatial_distortion=scene_contraction, num_images=self.num_train_data
-
+            self.scene_box.aabb,
+            spatial_distortion=scene_contraction,
+            num_images=self.num_train_data,
         )
+
         self.density_fns = []
         num_prop_nets = self.config.num_proposal_iterations
         # Build the proposal network(s)

@@ -135,7 +135,6 @@ class Model(nn.Module):
         """
 
         if self.collider is not None:
-            # 在这里完成了远近平面的设置
             ray_bundle = self.collider(ray_bundle)
 
         return self.get_outputs(ray_bundle)
