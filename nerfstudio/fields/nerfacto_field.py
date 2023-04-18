@@ -46,22 +46,13 @@ from nerfstudio.field_components.spatial_distortions import (
     SceneContraction,
     SpatialDistortion,
 )
-from nerfstudio.fields.base_field import Field
+from nerfstudio.fields.base_field import Field, shift_directions_for_tcnn
 
 try:
     import tinycudann as tcnn
 except ImportError:
     # tinycudann module doesn't exist
     pass
-
-
-def get_normalized_directions(directions: TensorType["bs":..., 3]) -> TensorType["bs":..., 3]:
-    """SH encoding must be in the range [0, 1]
-
-    Args:
-        directions: batch of directions
-    """
-    return (directions + 1.0) / 2.0
 
 
 class TCNNNerfactoField(Field):
@@ -233,7 +224,6 @@ class TCNNNerfactoField(Field):
             },
         )
 
-## -- addFreeNerf --##
     def get_density(self, ray_samples: RaySamples) -> Tuple[TensorType, TensorType]:
         """Computes and returns the densities."""
         if self.spatial_distortion is not None:
@@ -245,12 +235,6 @@ class TCNNNerfactoField(Field):
         # Make sure the tcnn gets inputs between 0 and 1.
         selector = ((positions > 0.0) & (positions < 1.0)).all(dim=-1)
         positions = positions * selector[..., None]
-
-        # # ---- add freq reg mask ----- ##
-        # if coord_freq_mask is not None:
-        #     positions = positions * coord_freq_mask
-        # ## ---------------------------- ##
-
         self._sample_locations = positions
         if not self._sample_locations.requires_grad:
             self._sample_locations.requires_grad = True
@@ -274,7 +258,7 @@ class TCNNNerfactoField(Field):
         if ray_samples.camera_indices is None:
             raise AttributeError("Camera indices are not provided.")
         camera_indices = ray_samples.camera_indices.squeeze()
-        directions = get_normalized_directions(ray_samples.frustums.directions)
+        directions = shift_directions_for_tcnn(ray_samples.frustums.directions)
         directions_flat = directions.view(-1, 3)
         d = self.direction_encoding(directions_flat)
 
